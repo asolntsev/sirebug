@@ -1,0 +1,10 @@
+<sirebug>
+  <watch name="debug-logs" signal="none">
+    <method class="org.apache.log4j.Category" method="debug">TODO: $0 $1</method>
+  </watch>
+  <watch name="HelloWorld">
+    <method class="org.sirebug.HelloWorldServlet" method="doGet">TODO: $0 $1 $2</method>
+    <method class="org.sirebug.HelloWorldServlet" method="doPost">TODO: $0 $1 $2</method>
+    <method class="org.sirebug.HelloWorldServlet" method="service">TODO: $0 $1 $2</method>
+  </watch>
+</sirebug>

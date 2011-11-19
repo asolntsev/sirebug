@@ -14,8 +14,7 @@ public class HelloWorldServlet extends HttpServlet {
   private static final Logger log = Logger.getLogger(HelloWorldServlet.class);
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     log.debug("HelloWorldServlet.doGet: " + new Date() + " : " + req.getQueryString());
 
     String message = req.getParameter("msg");
@@ -35,6 +34,7 @@ public class HelloWorldServlet extends HttpServlet {
             "	<a href=\"?errors=3&warnings=7\">Hello real world</a><br/>" +
             "	<a href=\"?\">Hello ideal world</a><br/>" +
             "</body></html>";
+    resp.setContentType("text/html");
     resp.getWriter().print(html);
   }
 

@@ -23,7 +23,7 @@ public class UserSettings implements Serializable {
       return true;
 
     for (int i = 0; i < cookies.length; i++) {
-      if (Consts.COOKIE_HIREBUG_STATUS.equals(cookies[i].getName())) {
+      if (Consts.COOKIE_SIREBUG_STATUS.equals(cookies[i].getName())) {
         return Consts.STATUS_ENABLED.equalsIgnoreCase(cookies[i].getValue());
       }
     }

@@ -97,7 +97,7 @@ public class ThreadExecutionHistoryPrinter {
 
     // sbResponse.append("<div align=\"right\"><tt> "); /*printClientIP(sbResponse)*/sbResponse.append("XXXXX</tt></div>");
 
-    sbResponse.append("<center><div style=\"width:700px; top:5px;\" id=\"hirebug_panel\"");
+    sbResponse.append("<center><div style=\"width:700px; top:5px;\" id=\"sirebug_panel\"");
     //if (bShowPanelImmediatelly || !bOpenInNewWindow)
     //	sbResponse.append(" style=\"visibility: visible;\"");
     //else
@@ -124,7 +124,7 @@ public class ThreadExecutionHistoryPrinter {
       // printLink(sbResponse, "Close", sServletPath, bOpenInNewWindow, Consts.ACTION_TURN_OFF);
       sbResponse.append("<td> <a target=\"_blank\" href=\"").append(sServletPath);
       sbResponse.append("?").append(Consts.PARAM_ACTION).append("=").append(Consts.ACTION_DISABLE_FOR_SESSION).append("\"");
-      sbResponse.append("><img alt=\"Disable HireBug for current session\" border=\"0\" src=\"").append(sImagePath).append("close.gif\"/>").append("</a> </td>");
+      sbResponse.append("><img alt=\"Disable SireBug for current session\" border=\"0\" src=\"").append(sImagePath).append("close.gif\"/>").append("</a> </td>");
     }
 
     sbResponse.append("</tr></table>");

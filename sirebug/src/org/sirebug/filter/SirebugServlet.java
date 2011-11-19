@@ -54,7 +54,7 @@ public class SirebugServlet extends HttpServlet {
   }
 
   private static void sendStatusCookie(HttpServletRequest request, HttpServletResponse response, boolean enabled) {
-    Cookie cookie = new Cookie(Consts.COOKIE_HIREBUG_STATUS, enabled ?
+    Cookie cookie = new Cookie(Consts.COOKIE_SIREBUG_STATUS, enabled ?
         Consts.STATUS_ENABLED : Consts.STATUS_DISABLED);
     cookie.setPath(request.getContextPath());
     cookie.setMaxAge(60 * 60 * 24 * 30 * 12);  // 1 year
@@ -63,7 +63,7 @@ public class SirebugServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    if (false) // HirebugSettings.isDisabled()
+    if (false) // SirebugSettings.isDisabled()
     {
       printText("Sorry, feature is unavaiable on production system", response);
       return;
@@ -96,28 +96,28 @@ public class SirebugServlet extends HttpServlet {
       return; // session expired?
     }
 
-    final SirebugSession hbSession = (SirebugSession) session.getAttribute(Consts.KEY_SIREBUG_SESSION);
-    if (hbSession == null) {
+    final SirebugSession sbSession = (SirebugSession) session.getAttribute(Consts.KEY_SIREBUG_SESSION);
+    if (sbSession == null) {
       printText("Your session seems to be expired", response);
       return; // session expired?
     }
 
     if (Consts.ACTION_ENABLE_FOR_SESSION.equals(sAction)) {
-      hbSession.setHirebugEnabled(true);
-      printText(" Hirebug is enabled for current session :)\nWelcome to the club!\n", response);
-      session.setAttribute(Consts.KEY_SIREBUG_SESSION, hbSession);
+      sbSession.setSirebugEnabled(true);
+      printText(" Sirebug is enabled for current session :)\nWelcome to the club!\n", response);
+      session.setAttribute(Consts.KEY_SIREBUG_SESSION, sbSession);
       return;
     } else if (Consts.ACTION_DISABLE_FOR_SESSION.equals(sAction)) {
-      hbSession.setHirebugEnabled(false);
+      sbSession.setSirebugEnabled(false);
       printDisabledConfirmationPage(request, response);
-      session.setAttribute(Consts.KEY_SIREBUG_SESSION, hbSession);
+      session.setAttribute(Consts.KEY_SIREBUG_SESSION, sbSession);
       return;
     }
 
     String sHistoryStep = request.getParameter(Consts.PARAM_STEP);  // 1,2,3,...
     int step = Integer.parseInt(sHistoryStep);
 
-    SessionHistory history = hbSession.getHistory();
+    SessionHistory history = sbSession.getHistory();
     if (history == null) {
       printText("Your session seems to be expired", response);
       return;
@@ -134,9 +134,9 @@ public class SirebugServlet extends HttpServlet {
     StringBuilder sbResponse = new StringBuilder();
     printHtmlHeader(sbResponse);
     printThreadSummary(session, sbResponse, threadSummary, step);
-    printConfigurationPage(request, hbSession, step, sbResponse);
+    printConfigurationPage(request, sbSession, step, sbResponse);
 
-    sbResponse.append("<div style=\"position:relative; width:100%; top:20px; text-align: left;\" id=\"hirebug_panel\">\n");
+    sbResponse.append("<div style=\"position:relative; width:100%; top:20px; text-align: left;\" id=\"sirebug_panel\">\n");
 
     final String sCategory = request.getParameter(Consts.PARAM_CATEGORY);  // "logs" | "sql" | "urls"
     // final String sLogLevel = request.getParameter(Consts.PARAM_LOG_LEVEL);	// "FATAL" : "ERROR" | "WARNING" | "INFO" | "DEBUG"
@@ -188,15 +188,15 @@ public class SirebugServlet extends HttpServlet {
   }
 
   public void printHtmlHeader(StringBuilder sbResponse) {
-    sbResponse.append("<html><head><title>HireBug</title>");
+    sbResponse.append("<html><head><title>SireBug</title>");
     sbResponse.append("<style>body, td{font-family: Lucida Grande, Arial, sans-serif; color: #000000; font-size: 8pt; }\n ");
     // sbResponse.append("a:active,a:hover,#leftcol a:active,#leftcol a:hover {font-family: Verdana, sans-serif; font-size: 15px;  font-weight: normal; color: #737373;}");
-    // sbResponse.append("a:hover {font-size: 9px;text-indent: 19px;line-height: 24px; color: #fff !important; height: 25px; width: 161px; overflow: hidden; background: url(/images/hirebug/super.gif) 0 -25px no-repeat;display: block;}");
+    // sbResponse.append("a:hover {font-size: 9px;text-indent: 19px;line-height: 24px; color: #fff !important; height: 25px; width: 161px; overflow: hidden; background: url(/images/sirebug/super.gif) 0 -25px no-repeat;display: block;}");
     sbResponse.append("a {text-decoration: none; color: #737373;}");
     sbResponse.append("a:hover {color: white; background-color: #737373;}"); // text-decoration: underline;
     sbResponse.append("</style>");
     sbResponse.append("<link rel=\"shortcut icon\" href=\"").append(imagePath).append(Consts.IMG_FAVICON).append("\" type=\"image/x-icon\" />");
-    //ThreadExectionHistoryPrinter.printHirebugHeader(sbResponse);
+    //ThreadExectionHistoryPrinter.printSirebugHeader(sbResponse);
     sbResponse.append("</head><body>");
   }
 
@@ -249,9 +249,9 @@ public class SirebugServlet extends HttpServlet {
 
     String sHistoryStep = request.getParameter(Consts.PARAM_STEP);  // 1,2,3,...
     String sRequestUri = request.getRequestURI();
-    sb.append(" Hirebug is disabled for current session :( <br/>\n");
+    sb.append(" Sirebug is disabled for current session :( <br/>\n");
     sb.append(" You can enable it on <a href=\"").append(sRequestUri);
-    sb.append("?").append(Consts.PARAM_STEP).append('=').append(sHistoryStep).append("\">HireBug configuration page</a><br/>\n");
+    sb.append("?").append(Consts.PARAM_STEP).append('=').append(sHistoryStep).append("\">SireBug configuration page</a><br/>\n");
     printHtmlFooter(sb);
     printHTML(sb.toString(), response);
   }
@@ -269,7 +269,7 @@ public class SirebugServlet extends HttpServlet {
     sb.append("<div style=\"position:absolute; width:230px; top:5px; right: 10px; text-align: left; \">");
     sb.append("<tt>Your IP is ").append(sClientIP).append(".</tt><br/>\n");
 
-    sb.append("<tt>HireBug is ");
+    sb.append("<tt>SireBug is ");
     if (UserSettings.isEnabledInCookies(request)) {
       sb.append("<font color='blue'>enabled</font> for this client.</tt><br/>\n");
     } else {
@@ -289,11 +289,11 @@ public class SirebugServlet extends HttpServlet {
 
     if (hbSession != null) {
       sb.append("	<li><a href=\"").append(servletPath).append("?");
-      if (hbSession.isHirebugEnabled()) {
+      if (hbSession.isSirebugEnabled()) {
         sb.append(Consts.PARAM_ACTION).append("=").append(Consts.ACTION_DISABLE_FOR_SESSION);
         sb.append('&').append(Consts.PARAM_STEP).append('=').append(step);
         sb.append("\">Disable for session</a></li>\n");
-      } else if (!hbSession.isHirebugEnabled() && UserSettings.isEnabledInCookies(request)) {
+      } else if (!hbSession.isSirebugEnabled() && UserSettings.isEnabledInCookies(request)) {
         sb.append(Consts.PARAM_ACTION).append("=").append(Consts.ACTION_ENABLE_FOR_SESSION);
         sb.append('&').append(Consts.PARAM_STEP).append('=').append(step);
         sb.append("\">Enable for session</a></li>\n");

@@ -21,7 +21,7 @@ public class SirebugFilter implements Filter {
   public void init(FilterConfig filterConfig) throws ServletException {
     active = false;
 
-    //m_sImagePath = filterConfig.getInitParameter(HRBugConst.PARAM_IMAGE_PATH);	// ends with /
+    // imagePath = filterConfig.getInitParameter(HRBugConst.PARAM_IMAGE_PATH);	// ends with /
 
     this.contextName = filterConfig.getServletContext().getServletContextName();
 
@@ -93,7 +93,7 @@ public class SirebugFilter implements Filter {
       return;
     }
 
-    if (false) // HirebugSettings.isDisabled()
+    if (false) // SirebugSettings.isDisabled()
     {
       // It happens on production or staging
       chain.doFilter(req, res);
@@ -102,7 +102,7 @@ public class SirebugFilter implements Filter {
 
     HttpServletRequest request = (HttpServletRequest) req;
     if (!UserSettings.isEnabledInCookies(request)) {
-      // User disabled Hirebug for his session
+      // User disabled Sirebug for his session
       chain.doFilter(req, res);
       return;
     }
@@ -116,10 +116,10 @@ public class SirebugFilter implements Filter {
     }
 
     if (session != null) {
-      SirebugSession hbSession = (SirebugSession) session.getAttribute(Consts.KEY_SIREBUG_SESSION);
-      if (hbSession == null) {
-        hbSession = new SirebugSession();
-      } else if (!hbSession.isHirebugEnabled()) {
+      SirebugSession sbSession = (SirebugSession) session.getAttribute(Consts.KEY_SIREBUG_SESSION);
+      if (sbSession == null) {
+        sbSession = new SirebugSession();
+      } else if (!sbSession.isSirebugEnabled()) {
         // It happens if user clicked button "Close". In this case, Hrebug is disabled for current session.
         chain.doFilter(req, res);
         return;
@@ -177,7 +177,7 @@ public class SirebugFilter implements Filter {
               sbResponse.append(sResponse.substring(nPreviousHeadIndex, indexHead));
               // String sTemp = sResponse.substring(indexHead, indexHead+9);
               if (sResponse.charAt(indexHead+7) != '\'')
-                ThreadSummaryPrinter.printHirebugHeader(sbResponse);
+                ThreadSummaryPrinter.printSirebugHeader(sbResponse);
               nPreviousHeadIndex = indexHead;
               indexHead = sResponse.indexOf("</head>", 1+nPreviousHeadIndex);
             }*/
@@ -208,7 +208,7 @@ public class SirebugFilter implements Filter {
     String sServletPath = this.servletName;
     if (session != null) {
       // Add "jsessionid" to the sirebug servlet name
-      // sServletPath = CURLRewriter.addSessionKeys(sServletPath, session.getId(), m_sServletPath);
+      // sServletPath = CURLRewriter.addSessionKeys(sServletPath, session.getId(), servletPath);
       sServletPath = servletName + ";jsessionid=" + session.getId();
     }
 

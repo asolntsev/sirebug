@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 
 public class ResponseWrapper extends HttpServletResponseWrapper {
   private final ByteArrayOutputStream output;
-  private String m_sContentType;
+  private String contentType;
   private int reportedContentLength;
   private PrintWriter printWriter;
 
@@ -87,7 +87,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
   }
 
   public void setContentType(String sContentType) {
-    m_sContentType = sContentType;
+    contentType = sContentType;
     super.setContentType(sContentType);
   }
 
@@ -98,7 +98,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
   }
 
   public String getContentType() {
-    return m_sContentType;
+    return contentType;
   }
 
   void close() throws IOException {

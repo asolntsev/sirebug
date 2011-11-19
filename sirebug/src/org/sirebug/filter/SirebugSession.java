@@ -2,77 +2,65 @@ package org.sirebug.filter;
 
 import java.io.Serializable;
 
-public class SirebugSession implements Serializable
-{
-	// IP Check (used only if IP Check is enabled)
-	private boolean m_bIPCheckPerformed = false;
-	private String m_sClientIP;
-	private String m_sIPMask;
-	private boolean m_bIPCheckSucceeded;
+public class SirebugSession implements Serializable {
+  // IP Check (used only if IP Check is enabled)
+  private boolean ipCheckPerformed = false;
+  private String clientIP;
+  private String ipMask;
+  private boolean ipCheckSucceeded;
 
-	// Current session parameters
+  // Current session parameters
 
-	/**
-	 * False if Hirebug is disabled for the current session.
-	 * This happens when user clicks button "disable" on UI.
-	 */
-	private boolean m_bHirebugEnabled = true;
+  /**
+   * False if Sirebug is disabled for the current session.
+   * This happens when user clicks button "disable" on UI.
+   */
+  private boolean sirebugEnabled = true;
 
-	private SessionHistory m_history;
+  private SessionHistory history;
 
-	public SirebugSession()
-	{
-		m_history = new SessionHistory();
-	}
+  public SirebugSession() {
+    history = new SessionHistory();
+  }
 
-	/**
-	 * @return the history
-	 */
-	public SessionHistory getHistory()
-	{
-		return m_history;
-	}
+  public SessionHistory getHistory() {
+    return history;
+  }
 
-	/**
-	 * @return the bIPCheckPerformed
-	 */
-	public boolean isIPCheckPerformed()
-	{
-		return m_bIPCheckPerformed;
-	}
+  /**
+   * @return the bIPCheckPerformed
+   */
+  public boolean isIpCheckPerformed() {
+    return ipCheckPerformed;
+  }
 
-	/**
-	 * @param asCheckPerformed the bIPCheckPerformed to set
-	 */
-	public void setIPCheckPerformed(boolean asCheckPerformed)
-	{
-		m_bIPCheckPerformed = asCheckPerformed;
-	}
+  /**
+   * @param asCheckPerformed the bIPCheckPerformed to set
+   */
+  public void setIpCheckPerformed(boolean asCheckPerformed) {
+    ipCheckPerformed = asCheckPerformed;
+  }
 
-	/**
-	 * @return the bIPCheckSucceeded
-	 */
-	public boolean isIPCheckSucceeded()
-	{
-		return m_bIPCheckSucceeded;
-	}
+  /**
+   * @return the bIPCheckSucceeded
+   */
+  public boolean isIPCheckSucceeded() {
+    return ipCheckSucceeded;
+  }
 
-	/**
-	 * @param asCheckSucceeded the bIPCheckSucceeded to set
-	 */
-	public void setIPCheckSucceeded(boolean asCheckSucceeded)
-	{
-		m_bIPCheckSucceeded = asCheckSucceeded;
-	}
+  /**
+   * @param asCheckSucceeded the bIPCheckSucceeded to set
+   */
+  public void setIPCheckSucceeded(boolean asCheckSucceeded) {
+    ipCheckSucceeded = asCheckSucceeded;
+  }
 
-	public boolean isHirebugEnabled()
-	{
-		return m_bHirebugEnabled;
-	}
+  public boolean isSirebugEnabled() {
+    return sirebugEnabled;
+  }
 
-	public void setHirebugEnabled( boolean hirebugEnabled )
-	{
-		m_bHirebugEnabled = hirebugEnabled;
-	}
+  public void setSirebugEnabled(boolean sirebugEnabled) {
+    this.sirebugEnabled = sirebugEnabled;
+  }
 }
 

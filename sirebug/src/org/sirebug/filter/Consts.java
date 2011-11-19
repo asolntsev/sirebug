@@ -19,7 +19,7 @@ public class Consts {
   //protected static final String CATEGORY_SHOW_URL_CONTENT = "show_url_content";
   //protected static final String CATEGORY_DB_LOCKS = "db_locks";
 
-  protected static final String COOKIE_HIREBUG_STATUS = "hirebug_status"; // FIXNE rename
+  protected static final String COOKIE_SIREBUG_STATUS = "sirebug_status";
   protected static final String STATUS_ENABLED = "enabled";
   protected static final String STATUS_DISABLED = "disabled";
 

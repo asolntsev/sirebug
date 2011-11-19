@@ -10,30 +10,30 @@ public class SessionHistory implements Serializable
 {
 	protected static final int MAX_HISTORY_LENGTH = 30;
 	
-	private int m_nMinStep;
-	private int m_nMaxStep;
-	private final Map<String, ThreadExecutionHistory> m_clicks;
+	private int minStep;
+	private int maxStep;
+	private final Map<String, ThreadExecutionHistory> clicks;
 
 	protected SessionHistory()
 	{
-		m_nMinStep = 0;
-		m_nMaxStep = 0;
-		m_clicks = new HashMap<String, ThreadExecutionHistory>();
+		minStep = 0;
+		maxStep = 0;
+		clicks = new HashMap<String, ThreadExecutionHistory>();
 	}
 
 	public int addThreadExecutionHistory(ThreadExecutionHistory t)
 	{
 		// Add new step
-		m_nMaxStep++;
-		m_clicks.put(String.valueOf(m_nMaxStep), t);
+		maxStep++;
+		clicks.put(String.valueOf(maxStep), t);
 
 		// Remove oldest steps to reduce memory usage
-		while (m_nMaxStep > MAX_HISTORY_LENGTH+m_nMinStep)
+		while (maxStep > MAX_HISTORY_LENGTH+ minStep)
 		{
-			m_clicks.remove( String.valueOf(m_nMinStep) );
-			m_nMinStep++;
+			clicks.remove( String.valueOf(minStep) );
+			minStep++;
 		}
-		return m_nMaxStep;
+		return maxStep;
 	}
 
 	public String toString()
@@ -48,7 +48,7 @@ public class SessionHistory implements Serializable
 
 	public ThreadExecutionHistory getThreadExecutionHistory(String sStep)
 	{
-		return (ThreadExecutionHistory) m_clicks.get(sStep);
+		return (ThreadExecutionHistory) clicks.get(sStep);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class SessionHistory implements Serializable
 	 */
 	public int getMaxStep()
 	{
-		return m_nMaxStep;
+		return maxStep;
 	}
 
 	/**
@@ -64,6 +64,6 @@ public class SessionHistory implements Serializable
 	 */
 	public int getMinStep()
 	{
-		return m_nMinStep;
+		return minStep;
 	}
 }

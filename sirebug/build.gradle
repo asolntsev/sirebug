@@ -49,4 +49,4 @@ task libs(type: Sync) {
   into "$buildDir/lib"
 }
 
-defaultTasks 'test'
+defaultTasks 'clean', 'libs', 'test', 'install'

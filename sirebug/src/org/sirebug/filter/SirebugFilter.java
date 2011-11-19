@@ -51,7 +51,6 @@ public class SirebugFilter implements Filter {
   }
 
   public void destroy() {
-    // nothinh to do? Shouldn't we un-instrument classes somehow?
   }
 
   private HttpSession getSession(HttpServletRequest request) {
@@ -68,21 +67,7 @@ public class SirebugFilter implements Filter {
     return session;
   }
 
-  public void doFilter(ServletRequest req, ServletResponse res,
-                       FilterChain chain) throws IOException, ServletException {
-    try {
-      doFilterSafely(req, res, chain);
-    } catch (IOException e) {
-      // log.error(e.getMessage(), e);
-      throw e;
-    } catch (ServletException e) {
-      // log.error(e.getMessage(), e);
-      throw e;
-    }
-  }
-
-  public void doFilterSafely(ServletRequest req, ServletResponse res,
-                             FilterChain chain) throws IOException, ServletException {
+  public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
     if (!active) {
       chain.doFilter(req, res);
       return;

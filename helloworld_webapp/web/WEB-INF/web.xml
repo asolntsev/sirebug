@@ -12,32 +12,31 @@
 	<filter>
 		<filter-name>SirebugFilter</filter-name>
 		<filter-class>org.sirebug.filter.SirebugFilter</filter-class>
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>100</load-on-startup>
+	</filter>
+	<filter>
+		<filter-name>SirebugServlet</filter-name>
+		<filter-class>org.sirebug.filter.SirebugServlet</filter-class>
+		<load-on-startup>101</load-on-startup>
 	</filter>
 	<filter-mapping>
-		<filter-name>SirebugFilter</filter-name>
-		<url-pattern>/hello</url-pattern>
+		<filter-name>SirebugServlet</filter-name>
+		<url-pattern>/* </url-pattern>
 	</filter-mapping>
-	
+	<filter-mapping>
+		<filter-name>SirebugFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<servlet>
 		<servlet-name>helloworld_servlet</servlet-name>
 		<display-name>helloworld_servlet</display-name>
 		<servlet-class>org.sirebug.HelloWorldServlet</servlet-class>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>sirebug_servlet</servlet-name>
-		<display-name>sirebug_servlet</display-name>
-		<servlet-class>org.sirebug.filter.SirebugServlet</servlet-class>
 		<load-on-startup>3</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>helloworld_servlet</servlet-name>
 		<url-pattern>/hello</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>sirebug_servlet</servlet-name>
-		<url-pattern>/sirebug</url-pattern>
 	</servlet-mapping>
 
 </web-app>

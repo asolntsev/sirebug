@@ -3,7 +3,7 @@ package org.sirebug.filter;
 import org.sirebug.result.MethodExecution;
 import org.sirebug.result.ThreadExecutionHistory;
 
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,7 +11,7 @@ import java.io.Writer;
 import java.net.URL;
 import java.util.List;
 
-public class SirebugServlet extends HttpServlet {
+public class SirebugServlet implements Filter {
   public static final String CONTENT_TYPE_PLAIN_TEXT = "text/plain";
   public static final String CONTENT_TYPE_HTML = "text/html";
 
@@ -23,19 +23,22 @@ public class SirebugServlet extends HttpServlet {
 
 
   @Override
-  public void init() throws ServletException {
+  public void init(FilterConfig filterConfig) throws ServletException {
     // webappRootFolder = filterConfig.getServletContext().getRealPath("/");
 
-    this.contextName = getServletContext().getServletContextName();
+    this.contextName = filterConfig.getServletContext().getServletContextName();
     if (contextName == null)
       contextName = ""; // I guess it should never happen...
 
-    servletName = getServletContext().getInitParameter(Consts.PARAM_SERVLET_PATH);
+    servletName = filterConfig.getServletContext().getInitParameter(Consts.PARAM_SERVLET_PATH);
     if (servletName == null)
       servletName = "sirebug";
 
     servletPath = '/' + contextName + '/' + servletName;
     imagePath = servletName + "?image=";
+  }
+
+  public void destroy() {
   }
 
   private HttpSession getSession(HttpServletRequest request) {
@@ -61,11 +64,17 @@ public class SirebugServlet extends HttpServlet {
     response.addCookie(cookie);
   }
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+    HttpServletRequest request = (HttpServletRequest) req;
+    HttpServletResponse response = (HttpServletResponse) res;
+    if (!request.getServletPath().equals("/sirebug")) {
+      chain.doFilter(req, res);
+      return;
+    }
+
     if (false) // SirebugSettings.isDisabled()
     {
-      printText("Sorry, feature is unavaiable on production system", response);
+      printText("Sorry, feature is not available on production system", res);
       return;
     }
 
@@ -216,16 +225,16 @@ public class SirebugServlet extends HttpServlet {
         sServletPath, imagePath, false);
   }
 
-  private static void printHTML(String sMessage, HttpServletResponse response) throws IOException {
+  private static void printHTML(String sMessage, ServletResponse response) throws IOException {
     print(sMessage, response, CONTENT_TYPE_HTML);
   }
 
-  private static void printText(String sMessage, HttpServletResponse response) throws IOException {
+  private static void printText(String sMessage, ServletResponse response) throws IOException {
     print(sMessage, response, CONTENT_TYPE_PLAIN_TEXT);
   }
 
 
-  private static void print(String sMessage, HttpServletResponse response, String sContentType) throws IOException {
+  private static void print(String sMessage, ServletResponse response, String sContentType) throws IOException {
     PrintWriter out = new PrintWriter(response.getOutputStream());
     try {
       response.setContentType(sContentType);
@@ -239,7 +248,7 @@ public class SirebugServlet extends HttpServlet {
     try {
       if (writer != null)
         writer.close();
-    } catch (IOException ioe) {
+    } catch (IOException ignore) {
     }
   }
 

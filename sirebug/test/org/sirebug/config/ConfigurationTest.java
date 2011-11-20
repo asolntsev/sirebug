@@ -1,8 +1,9 @@
 package org.sirebug.config;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class ConfigurationTest extends TestCase {
+public class ConfigurationTest {
   public static SirebugConfiguration createTestConfiguration() {
     SirebugConfiguration config = new SirebugConfiguration();
     config.addWatch(new Watch("say", "none")
@@ -15,6 +16,7 @@ public class ConfigurationTest extends TestCase {
     return config;
   }
 
+  @Test
   public void testSize() {
     assertEquals(0, new SirebugConfiguration().getWatches().size());
 

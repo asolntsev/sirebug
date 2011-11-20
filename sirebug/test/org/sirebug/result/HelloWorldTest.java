@@ -2,7 +2,8 @@ package org.sirebug.result;
 
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.sirebug.config.ConfigurationTest;
 import org.sirebug.config.Instrumentator;
 import org.sirebug.config.SirebugConfiguration;
@@ -10,8 +11,9 @@ import org.sirebug.config.SirebugConfiguration;
 import java.io.IOException;
 import java.util.List;
 
-public class HelloWorldTest extends TestCase {
-  /*public void testHelloWorldWithoutTracking()
+public class HelloWorldTest {
+  /*@Test
+  public void testHelloWorldWithoutTracking()
    {
      HelloWorld hw = new HelloWorld();
      assertEquals(1, hw.say("yop"));
@@ -19,6 +21,7 @@ public class HelloWorldTest extends TestCase {
      assertEquals(3, hw.sayHello());
    }*/
 
+  @Test
   public void testRecording() throws NotFoundException, IOException, CannotCompileException {
     SirebugConfiguration config = ConfigurationTest.createTestConfiguration();
     Instrumentator.instrumentClasses(config);

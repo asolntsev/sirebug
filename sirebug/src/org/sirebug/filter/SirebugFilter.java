@@ -21,9 +21,7 @@ public class SirebugFilter implements Filter {
   public void init(FilterConfig filterConfig) throws ServletException {
     active = false;
 
-    // imagePath = filterConfig.getInitParameter(HRBugConst.PARAM_IMAGE_PATH);	// ends with /
-
-    this.contextName = filterConfig.getServletContext().getServletContextName();
+    contextName = filterConfig.getServletContext().getServletContextName();
 
     servletName = filterConfig.getInitParameter(Consts.PARAM_SERVLET_PATH);
     if (servletName == null)
@@ -31,11 +29,6 @@ public class SirebugFilter implements Filter {
 
     URL urlConfigXml = Thread.currentThread().getContextClassLoader().getResource("sirebug.cfg.xml");
     if (urlConfigXml == null) {
-      // TODO Is it really error? Maybe it's ok for some applications?
-      // throw new ServletException("Resource sirebug.cfg.xml is not found in classpath");
-
-      //if (log.isInfoEnabled())
-      //	log.info("Resource sirebug.cfg.xml is not found in classpath. Skip Sirebug for " + contextName);
       System.out.println("INFO: Resource sirebug.cfg.xml is not found in classpath. Skip Sirebug for " + contextName);
       return;
     }

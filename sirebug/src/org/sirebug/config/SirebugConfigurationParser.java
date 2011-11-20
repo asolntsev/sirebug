@@ -7,7 +7,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 
 public class SirebugConfigurationParser {
@@ -25,14 +24,8 @@ public class SirebugConfigurationParser {
         String signal = getOptionalAttribute(el, "signal");
 
         Watch watch = new Watch(name, signal);
-        for (Iterator<Element> it = el.elementIterator("method"); it.hasNext(); ) {
-          // TODO Check for null and throw appropriate exception
-          Element method = it.next();
-          String className = method.attribute("class").getText();
-          String methodName = method.attribute("method").getText();
-          String pattern = el.getText();
-
-          watch.addMethod(new TrackedMethod(className, methodName, pattern));
+        for (Element method : getMethods(el)) {
+          watch.addMethod(extractMethod(el, method));
         }
 
         config.addWatch(watch);
@@ -42,6 +35,27 @@ public class SirebugConfigurationParser {
     } catch (DocumentException e) {
       throw new RuntimeException("Error while parsing sirebug.cfg.xml", e);
     }
+  }
+
+  private static TrackedMethod extractMethod(Element el, Element method) {
+    String className = getAttribute(method, "class");
+    String methodName = getAttribute(method, "method");
+    String pattern = el.getText();
+
+    return new TrackedMethod(className, methodName, pattern);
+  }
+
+  private static String getAttribute(Element method, String attributeName) {
+    Attribute attribute = method.attribute(attributeName);
+    if (attribute == null) {
+      throw new IllegalArgumentException("Missing attribute " + attributeName + " in Sirebug configuration");
+    }
+    return attribute.getText();
+  }
+
+  @SuppressWarnings("unchecked")
+  private static List<Element> getMethods(Element el) {
+    return el.elements("method");
   }
 
   private static String getOptionalAttribute(Element el, String attrName) {

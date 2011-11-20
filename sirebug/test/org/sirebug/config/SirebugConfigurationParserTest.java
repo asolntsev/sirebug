@@ -1,17 +1,17 @@
 package org.sirebug.config;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static java.lang.Thread.currentThread;
+import static org.junit.Assert.*;
 
 import java.net.URL;
 import java.util.List;
 
-public class SirebugConfigurationParserTest extends TestCase {
-  public void testParseXml() {
-    URL urlConfigXml = Thread.currentThread().getContextClassLoader().getResource("sirebug.cfg.xml");
-    assertNotNull(urlConfigXml);
-
-    SirebugConfiguration config = SirebugConfigurationParser.parseXml(urlConfigXml);
-    assertNotNull(config);
+public class SirebugConfigurationParserTest {
+  @Test
+  public void parsesConfigurationXml() {
+    SirebugConfiguration config = parse("sirebug.cfg.xml");
 
     List<Watch> watches = config.getWatches();
     assertEquals(2, watches.size());
@@ -36,5 +36,24 @@ public class SirebugConfigurationParserTest extends TestCase {
       assertEquals("service", trackedMethods.get(2).getMethodName());
       assertNull(watches.get(1).getSignal());
     }
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void classAttributeIsRequired() {
+    parse("sirebug.cfg.with-missing-class.xml");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void methodAttributeIsRequired() {
+    parse("sirebug.cfg.with-missing-method.xml");
+  }
+
+  private SirebugConfiguration parse(String configurationFile) {
+    URL urlConfigXml = currentThread().getContextClassLoader().getResource(configurationFile);
+    assertNotNull(urlConfigXml);
+
+    SirebugConfiguration config = SirebugConfigurationParser.parseXml(urlConfigXml);
+    assertNotNull(config);
+    return config;
   }
 }

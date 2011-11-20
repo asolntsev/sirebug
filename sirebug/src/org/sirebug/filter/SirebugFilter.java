@@ -87,7 +87,6 @@ public class SirebugFilter implements Filter {
 
     HttpServletRequest request = (HttpServletRequest) req;
     if (!UserSettings.isEnabledInCookies(request)) {
-      // User disabled Sirebug for his session
       chain.doFilter(req, res);
       return;
     }

@@ -48,8 +48,8 @@ configurations.runtime.exclude(group: "maven-plugins") // jaxen:1.1.3 has bad de
 configurations.runtime.exclude(group: "xalan") // jaxen:1.1.3 has bad dependencies
 
 task libs(type: Sync) {
-  from configurations.compile
   from configurations.runtime
+  from configurations.testRuntime
   into "$buildDir/lib"
 }
 
